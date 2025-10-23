@@ -61,7 +61,7 @@ jobs:
           gcloud auth configure-docker --quiet
           gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
           # Build docker image
-          IMAGE=europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v${(1.0.11)}
+          IMAGE=europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v1.0.11
           docker build -t $IMAGE .
           docker push $IMAGE
 
@@ -77,6 +77,6 @@ jobs:
         run: |
           # Deploy to cloud run
           gcloud run deploy flutter-workshop-group-${{ vars.GROUP_NUMBER }} \
-          --image europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v${(1.0.11)} \
+          --image europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v1.0.11 \
           --region us-central1 \
           --allow-unauthenticated
