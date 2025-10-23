@@ -61,7 +61,13 @@ jobs:
           gcloud auth configure-docker --quiet
           gcloud auth configure-docker europe-west3-docker.pkg.dev --quiet
           # Build docker image
-      
+          IMAGE=europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v${(cat app-version)}
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
+
+
+
       # Step 7: Deploy the containerized app to Google Cloud Run
       # - Pulls the versioned image from Artifact Registry
       # - Deploys to us-central1 region with unique service name per group
@@ -70,3 +76,7 @@ jobs:
       - name: Deploy to Cloud Run ☁️
         run: |
           # Deploy to cloud run
+          gcloud run deploy flutter-workshop-group-${{ vars.GROUP_NUMBER }} \
+          --image europe-west3-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REGISTRY }}/flutter-app-runner-group-${{ vars.GROUP_NUMBER }}:v${(cat app-version)} \
+          --region us-central1 \
+          --allow-unauthenticated
